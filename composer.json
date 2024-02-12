@@ -1,0 +1,22 @@
+{
+    "name": "tualo/events",
+    "description": "events for tualo office",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Hoffmann",
+            "email": "thomas.hoffmann@tualo.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Tualo\\Office\\Events\\": "src/"
+        },
+        "files": ["src/functions.php"]
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "tualo/ds": "*"
+    }
+}
