@@ -11,7 +11,7 @@ class Image implements IRoute{
 
         BasicRoute::add('/tualocms/page/eventimg/(?P<id>[\/.\w\d\-\_\.]+)'.'',function($matches){
 
-            $image = DSFiles::instance('events_bilder_bilder');
+            $image = DSFiles::instance('events_bilder');
             $imagedata = $image->getBase64('id',$matches['id'],true);
             $image_error = $image->getError();
             if ($image_error!=''){
