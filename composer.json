@@ -17,6 +17,7 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "tualo/ds": "*"
+        "tualo/ds": "*",
+        "tualo/cms": "*"
     }
 }
