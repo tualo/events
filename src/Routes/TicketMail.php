@@ -23,11 +23,17 @@ class TicketMail implements IRoute{
                     if (count($trows)>0){
                         foreach($trows as $trow){
                             $_REQUEST['save']=$trow['id'].'.pdf';
-                            P::get('event_tickets','ticket',$trow['id']);
+                            $_REQUEST['tablename']=$tablename;
+                            $matches=[
+                                'tablename'=>'event_tickets',
+                                'template'=>'ticket',
+                                'id'=>$trow['id']
+                            ];
+                            DomPDFRenderingHelper::render($matches,$_REQUEST);
                         }
                     }
                 }
-                $mail->addAttachment( App::get("tempPath").'/'.$item->get('attachment_file') ,$name);
+                //$mail->addAttachment( App::get("tempPath").'/'.$item->get('attachment_file') ,$name);
 
                 App::result('sucess', true);
             }catch(\Exception $e){
