@@ -17,7 +17,7 @@ class TicketMail implements IRoute{
 
                 $sql = 'select distinct order_id,email,name from view_member_booked_events where email="thomas.hoffmann@tualo.de"';
                 $db = App::get('session')->getDB();
-                $list = $db->execute($sql);
+                $list = $db->direct($sql);
                 foreach($list as $key=>$row){
                     $sql = 'select id from event_tickets where order_id = {order_id} and email is null';
                     $trows = $db->direct($sql,$row);
