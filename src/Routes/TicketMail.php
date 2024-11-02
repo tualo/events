@@ -14,15 +14,17 @@ class TicketMail implements IRoute{
             try{
                 App::contenttype('application/json');
 
-                $sql = 'select distinct order_id,email,description,name from view_member_booked_events where email="thomas.hoffmann@tualo.de"';
+                $sql = 'select distinct order_id,email,name from view_member_booked_events where email="thomas.hoffmann@tualo.de"';
                 $db = App::get('session')->getDB();
                 $list = $db->execute($sql);
                 foreach($list as $key=>$row){
-                    $sql = 'select id from event_tickets where order_id = {order_id}';
-                    $db->direct($sql,$trows);
-                    foreach($trows as $trow){
-                        $_REQUEST['save']=$trow['id'].'.pdf';
-                        P::get('event_tickets','ticket',$trow['id']);
+                    $sql = 'select id from event_tickets where order_id = {order_id} and email is null';
+                    $trows = $db->direct($sql,$row);
+                    if (count($trows)>0){
+                        foreach($trows as $trow){
+                            $_REQUEST['save']=$trow['id'].'.pdf';
+                            P::get('event_tickets','ticket',$trow['id']);
+                        }
                     }
                 }
                 $mail->addAttachment( App::get("tempPath").'/'.$item->get('attachment_file') ,$name);
