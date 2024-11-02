@@ -15,7 +15,7 @@ class TicketMail implements IRoute{
                 App::contenttype('application/json');
 
                 $sql = 'select distinct order_id,email,description,name from view_member_booked_events where email="thomas.hoffmann@tualo.de"';
-                $db = TualoApplication::get('session')->getDB();
+                $db = App::get('session')->getDB();
                 $list = $db->execute($sql);
                 foreach($list as $key=>$row){
                     $sql = 'select id from event_tickets where order_id = {order_id}';
