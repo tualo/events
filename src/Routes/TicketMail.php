@@ -26,7 +26,7 @@ class TicketMail implements IRoute{
                 $GLOBALS['pug_cache']=App::get("basePath").'/cache/'.$db->dbname.'/ds';
             
                 
-                $sql = 'select distinct order_id,email,name from view_member_booked_events where email="thomas.hoffmann@tualo.de"';
+                $sql = 'select distinct order_id,email,name from view_member_booked_events ';
                 $list = $db->direct($sql);
                 foreach($list as $key=>$row){
                     $attachments = [];
