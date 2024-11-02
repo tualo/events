@@ -2,6 +2,7 @@
 namespace Tualo\Office\Events\Routes;
 use Tualo\Office\Basic\TualoApplication as App;
 use Tualo\Office\Basic\Route as BasicRoute;
+use Tualo\Office\PUG\DomPDFRenderingHelper;
 use Tualo\Office\Basic\IRoute;
 use Tualo\Office\DS\DSFiles;
 use Tualo\Office\PUG\PDF as P;
@@ -23,7 +24,7 @@ class TicketMail implements IRoute{
                     if (count($trows)>0){
                         foreach($trows as $trow){
                             $_REQUEST['save']=$trow['id'].'.pdf';
-                            $_REQUEST['tablename']=$tablename;
+                            $_REQUEST['tablename']='event_tickets';
                             $matches=[
                                 'tablename'=>'event_tickets',
                                 'template'=>'ticket',
