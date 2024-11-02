@@ -49,11 +49,28 @@ class TicketMail implements IRoute{
                             DomPDFRenderingHelper::render($matches,$_REQUEST);
                         }
                         App::result('attachments', $attachments);
+
+                        \Tualo\Office\Mail\Spooler::addMail(
+                            "Dein Ticketkauf bei Kaiserwerke Gera",
+                            'eventservice@kaiserwerke.de',
+                            $row['mail'],
+                            strip_tags(
+                                \Tualo\Office\PUG\PUG::render('text-mail-ticket',[ 
+                                    'data'=>[
+                                        'ticketname'=>$row['name'],
+                                    ] 
+                                ]
+                                )
+                            ),
+                            $attachments
+                        
+                        );
+
                     }
                 }
                 //$mail->addAttachment( App::get("tempPath").'/'.$item->get('attachment_file') ,$name);
 
-                App::result('sucess', true);
+                App::result('success', true);
             }catch(\Exception $e){
                 App::result('msg', $e->getMessage());
             }
