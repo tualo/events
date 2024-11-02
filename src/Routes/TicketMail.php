@@ -13,6 +13,7 @@ class TicketMail implements IRoute{
 
         BasicRoute::add('/ticketmail'.'',function($matches){
             try{
+                $db = App::get('session')->getDB();
                 App::contenttype('application/json');
                 set_time_limit(600);
         
@@ -26,7 +27,6 @@ class TicketMail implements IRoute{
             
                 
                 $sql = 'select distinct order_id,email,name from view_member_booked_events where email="thomas.hoffmann@tualo.de"';
-                $db = App::get('session')->getDB();
                 $list = $db->direct($sql);
                 foreach($list as $key=>$row){
                     $attachments = [];
