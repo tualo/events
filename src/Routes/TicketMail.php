@@ -14,16 +14,32 @@ class TicketMail implements IRoute{
         BasicRoute::add('/ticketmail'.'',function($matches){
             try{
                 App::contenttype('application/json');
-
+                set_time_limit(600);
+        
+                if (!file_exists(App::get("basePath").'/cache/'.$db->dbname)){
+                    mkdir(App::get("basePath").'/cache/'.$db->dbname);
+                }
+                if (!file_exists(App::get("basePath").'/cache/'.$db->dbname.'/ds')){
+                    mkdir(App::get("basePath").'/cache/'.$db->dbname.'/ds');
+                }
+                $GLOBALS['pug_cache']=App::get("basePath").'/cache/'.$db->dbname.'/ds';
+            
+                
                 $sql = 'select distinct order_id,email,name from view_member_booked_events where email="thomas.hoffmann@tualo.de"';
                 $db = App::get('session')->getDB();
                 $list = $db->direct($sql);
                 foreach($list as $key=>$row){
+                    $attachments = [];
                     $sql = 'select id from event_tickets where order_id = {order_id} and email is null';
                     $trows = $db->direct($sql,$row);
                     if (count($trows)>0){
+
                         foreach($trows as $trow){
-                            $_REQUEST['save']=$trow['id'].'.pdf';
+                            $_REQUEST['save']=App::get('tempPath') . '/'.$trow['id'].'.pdf';
+                            $attachments[] = [
+                                'path'=>$_REQUEST['save'],
+                                'name'=>$trow['id'].'.pdf'
+                            ];
                             $_REQUEST['tablename']='event_tickets';
                             $matches=[
                                 'tablename'=>'event_tickets',
@@ -32,6 +48,7 @@ class TicketMail implements IRoute{
                             ];
                             DomPDFRenderingHelper::render($matches,$_REQUEST);
                         }
+                        App::result('attachments', $attachments);
                     }
                 }
                 //$mail->addAttachment( App::get("tempPath").'/'.$item->get('attachment_file') ,$name);
