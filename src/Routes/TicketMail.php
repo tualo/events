@@ -53,7 +53,7 @@ class TicketMail implements IRoute{
                         \Tualo\Office\Mail\Spooler::addMail(
                             "Dein Ticketkauf bei Kaiserwerke Gera",
                             'eventservice@kaiserwerke.de',
-                            $row['mail'],
+                            $row['email'],
                             strip_tags(
                                 \Tualo\Office\PUG\PUG::render('text-mail-ticket',[ 
                                     'data'=>[
@@ -65,7 +65,20 @@ class TicketMail implements IRoute{
                             $attachments
                         
                         );
-
+                        foreach($trows as $trow){
+                            $sql = 'update event_tickets set email={email} where id={id}';
+                            $db->direct($sql,[
+                                'email'=>$row['email'],
+                                'id'=>$trow['id']
+                            ]);
+                        }
+                        /*
+                        foreach($attachments as $attachment){
+                            if (file_exists($attachment['path'])){
+                                unlink($attachment['path']);
+                            }
+                        }
+                            */
                     }
                 }
                 //$mail->addAttachment( App::get("tempPath").'/'.$item->get('attachment_file') ,$name);
