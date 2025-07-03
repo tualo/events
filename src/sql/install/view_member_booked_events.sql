@@ -22,7 +22,7 @@ select
         `vae`.`zeit`,
         ' Uhr'
     ) AS `tdate`,
-    `view_actual_eventlist_img`.`img_str` AS `img_str`
+    '' AS `img_str`
 from
     (
         (
@@ -61,9 +61,6 @@ from
                     `etp`.`event_id` = `p`.`event_id`
                     and `etp`.`categorie_id` = `p`.`categorie_id`
                 )
-            )
-            join `view_actual_eventlist_img` on(
-                `view_actual_eventlist_img`.`id` = `events_event`.`imagebild`
             )
         )
         join `view_actual_eventlist` `vae` on(`vae`.`eventid` = `p`.`event_id`)

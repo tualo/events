@@ -1,0 +1,2 @@
+delimiter ;
+CREATE OR REPLACE VIEW `view_tickets_available` AS select `event_tickets_prices`.`event_id` AS `event_id`,sum(`event_tickets_prices`.`quota`) - sum(`event_tickets_prices`.`sold`) AS `s` from `event_tickets_prices` where `event_tickets_prices`.`available_from` <= current_timestamp() and `event_tickets_prices`.`available_to` + interval 1 day > current_timestamp() group by `event_tickets_prices`.`event_id`;
