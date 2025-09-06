@@ -1,46 +1,56 @@
 <?php
+
 namespace Tualo\Office\Events\Routes;
+
 use Tualo\Office\Basic\TualoApplication as App;
 use Tualo\Office\Basic\Route as BasicRoute;
 use Tualo\Office\Basic\IRoute;
 use Tualo\Office\DS\DSFiles;
 
-class Image implements IRoute{
-    public static function register(){
+class Image implements IRoute
+{
+    public static function register()
+    {
 
 
-        BasicRoute::add('/tualocms/page/eventimg/(?P<id>[\/.\w\d\-\_\.]+)'.'',function($matches){
+        BasicRoute::add('/tualocms/page/eventimg/(?P<id>[\/.\w\d\-\_\.]+)' . '', function ($matches) {
 
             $image = DSFiles::instance('events_bilder');
-            $imagedata = $image->getBase64('id',$matches['id'],true);
+            $imagedata = $image->getBase64('id', $matches['id'], true);
             $image_error = $image->getError();
-            if ($image_error!=''){
+            if ($image_error != '') {
                 throw new \Exception($image_error);
             }
             BasicRoute::$finished = true;
             http_response_code(200);
 
-            list($mime,$data) =  explode(',',$imagedata);
-            $etag=md5($data);
-            App::contenttype( str_replace('data:','',$mime) );
+            list($mime, $data) =  explode(',', $imagedata);
+            $etag = md5($data);
+            App::contenttype(str_replace('data:', '', $mime));
 
 
             // header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT"); 
-            header("Etag: $etag");  
+            header("Etag: $etag");
             header('Cache-Control: public');
-                    
+
             if (
-                (isset($_SERVER['HTTP_IF_NONE_MATCH']) && ( trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag ) )
-            ) { 
-                header("HTTP/1.1 304 Not Modified"); 
-                exit; 
-            } 
-            
-            App::body( base64_decode( $data ) );
+                (isset($_SERVER['HTTP_IF_NONE_MATCH']) && (trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag))
+            ) {
+                header("HTTP/1.1 304 Not Modified");
+                exit;
+            }
+
+            $im = imagecreatefromstring(base64_decode($data));
+            // Save the image
+            ob_start();
+            imagewebp($im, null, 85);
+            $binary_data = ob_get_contents();
+            ob_end_clean();
+
+            // App::body(base64_decode($data));
+            App::body($binary_data);
             BasicRoute::$finished = true;
             http_response_code(200);
-        
-        },['get'],true);
-
+        }, ['get'], true);
     }
 }
