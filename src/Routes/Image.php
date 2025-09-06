@@ -26,7 +26,7 @@ class Image implements IRoute
 
             list($mime, $data) =  explode(',', $imagedata);
             $etag = md5($data);
-            App::contenttype(str_replace('data:', '', $mime));
+            // App::contenttype(str_replace('data:', '', $mime));
 
 
             // header("Last-Modified: ".gmdate("D, d M Y H:i:s", $last_modified_time)." GMT"); 
@@ -40,6 +40,7 @@ class Image implements IRoute
                 exit;
             }
 
+            header('Content-Type: image/webp');
             $im = imagecreatefromstring(base64_decode($data));
             // Save the image
             ob_start();
