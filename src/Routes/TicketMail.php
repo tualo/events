@@ -4,10 +4,7 @@ namespace Tualo\Office\Events\Routes;
 
 use Tualo\Office\Basic\TualoApplication as App;
 use Tualo\Office\Basic\Route as BasicRoute;
-use Tualo\Office\PUG\DomPDFRenderingHelper;
 use Tualo\Office\Basic\IRoute;
-use Tualo\Office\DS\DSFiles;
-use Tualo\Office\PUG\PDF as P;
 use Tualo\Office\PUG\PDF2 as PDF2;
 
 class TicketMail implements IRoute
@@ -45,6 +42,9 @@ class TicketMail implements IRoute
                                 'name' => $trow['id'] . '.pdf'
                             ];
                             $data = PDF2::render('event_tickets', 'ticket', $trow['id']);
+                            if (file_exists(App::get('tempPath') . '/' . $trow['id'] . '.pdf')) {
+                                unlink(App::get('tempPath') . '/' . $trow['id'] . '.pdf');
+                            }
                             file_put_contents(App::get('tempPath') . '/' . $trow['id'] . '.pdf', $data);
                         }
                         App::result('attachments', $attachments);
@@ -73,13 +73,12 @@ class TicketMail implements IRoute
                                 'id' => $trow['id']
                             ]);
                         }
-                        /*
-                        foreach($attachments as $attachment){
-                            if (file_exists($attachment['path'])){
+
+                        foreach ($attachments as $attachment) {
+                            if (file_exists($attachment['path'])) {
                                 unlink($attachment['path']);
                             }
                         }
-                            */
                     }
                 }
                 //$mail->addAttachment( App::get("tempPath").'/'.$item->get('attachment_file') ,$name);
