@@ -40,18 +40,12 @@ class TicketMail implements IRoute
                     if (count($trows) > 0) {
 
                         foreach ($trows as $trow) {
-                            $_REQUEST['save'] = App::get('tempPath') . '/' . $trow['id'] . '.pdf';
                             $attachments[] = [
-                                'path' => $_REQUEST['save'],
+                                'path' => App::get('tempPath') . '/' . $trow['id'] . '.pdf',
                                 'name' => $trow['id'] . '.pdf'
                             ];
-                            $_REQUEST['tablename'] = 'event_tickets';
-                            $matches = [
-                                'tablename' => 'event_tickets',
-                                'template' => 'ticket',
-                                'id' => $trow['id']
-                            ];
-                            PDF2::render('event_tickets', 'ticket', $trow['id']);
+                            $data = PDF2::render('event_tickets', 'ticket', $trow['id']);
+                            file_put_contents(App::get('tempPath') . '/' . $trow['id'] . '.pdf', $data);
                         }
                         App::result('attachments', $attachments);
 
