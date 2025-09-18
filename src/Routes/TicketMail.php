@@ -56,8 +56,8 @@ class TicketMail implements IRoute
                         App::result('attachments', $attachments);
 
                         \Tualo\Office\Mail\Spooler::addMail(
-                            App::configuration('ticket', 'mail_subject', 'Dein Ticketkauf'), // "Dein Ticketkauf bei Kaiserwerke Gera",
-                            App::configuration('ticket', 'mail_from', 'eventservice@kaiserwerke.de'),
+                            App::configuration('events', 'mail_subject', 'Dein Ticketkauf'), // "Dein Ticketkauf bei Kaiserwerke Gera",
+                            App::configuration('events', 'mail_from', 'eventservice@kaiserwerke.de'),
                             $row['email'],
                             strip_tags(
                                 \Tualo\Office\PUG\PUG::render(
