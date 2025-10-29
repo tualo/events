@@ -7,7 +7,7 @@ use Tualo\Office\Basic\Route as BasicRoute;
 use Tualo\Office\Basic\IRoute;
 use Tualo\Office\PUG\PDF2 as PDF2;
 
-class TicketMail implements IRoute
+class TicketMail extends \Tualo\Office\Basic\RouteWrapper
 {
     public static function register()
     {
