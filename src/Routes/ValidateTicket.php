@@ -55,6 +55,29 @@ class ValidateTicket extends \Tualo\Office\Basic\RouteWrapper
             }
         }, ['get', 'post'], true);
 
+
+
+        BasicRoute::add('/ticket-scanner-app/ticketList' . '', function ($matches) {
+            try {
+                $db = App::get('session')->getDB();
+                App::contenttype('application/json');
+                App::result('success', true);
+                $tickets = \Tualo\Office\DS\DSTable::instance('event_ticket_scanner')
+                    ->read()
+                    ->get();
+                foreach ($tickets as $k => $v) {
+                    $tickets[$k]['ticket'] = json_decode($tickets[$k]['ticketdata'], true);
+                }
+                App::result(
+                    'tickets',
+                    $tickets
+                );
+            } catch (\Exception $e) {
+                App::result('msg', $e->getMessage());
+            }
+        }, ['get'], true);
+
+
         BasicRoute::add('/ticket-scanner-app/validateTicket' . '', function ($matches) {
             try {
                 $db = App::get('session')->getDB();
