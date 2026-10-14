@@ -106,13 +106,15 @@ class ValidateTicket extends \Tualo\Office\Basic\RouteWrapper
                         $o['createtime'] = $scanned['createtime'];
                     }
                     $event_tickets_scanned->insert($o);
+
+                    App::result(
+                        'ticket',
+                        json_decode(\Tualo\Office\DS\DSTable::instance('event_ticket_scanner')->f('id', 'eq', $ticket['id'])->read()->getSingleValue('ticketdata'), true)
+                    );
                 }
 
                 App::result('success', $ticket !== false);
-                App::result(
-                    'ticket',
-                    json_decode(\Tualo\Office\DS\DSTable::instance('event_ticket_scanner')->f('id', 'eq', $ticket['id'])->read()->getSingleValue('ticketdata'), true)
-                );
+
                 App::result('scanned', isset($scanned['id']));
                 App::result('lastScanned', isset($scanned['id']) ? $scanned['createtime'] : null);
             } catch (\Exception $e) {
