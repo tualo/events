@@ -13,3 +13,6 @@ CREATE TABLE `event_tickets_prices` (
   CONSTRAINT `fk_event_tickets_prices_categorie_id` FOREIGN KEY (`categorie_id`) REFERENCES `event_tickets_categorie` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_event_tickets_prices_event_id` FOREIGN KEY (`event_id`) REFERENCES `events_event` (`eventid`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+alter table event_tickets_prices modify quota	int(10) unsigned default 0;
+alter table event_tickets_prices modify price	decimal(10,2) default 0 ;
